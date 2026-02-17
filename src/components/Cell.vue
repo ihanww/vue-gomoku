@@ -31,7 +31,7 @@ const props = withDefaults(defineProps<Props>(), {
   isLastMove: false,
   clickable: true,
   isUndoing: false,
-  isWinLine: false
+  isWinLine: false,
 })
 
 const emit = defineEmits<Emits>()
@@ -240,7 +240,8 @@ function handleClick() {
 }
 
 @keyframes winPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(-50%, -50%) scale(1);
     opacity: 0.6;
   }

@@ -37,6 +37,7 @@
 
 4. **游戏状态**
    - 游戏进行中
+   - 游戏计时
    - 胜利判定（五连珠）
    - 重新开始
    - 悔棋功能
@@ -215,3 +216,99 @@ const actions = {
 - [Vue 3 官方文档](https://vuejs.org/)
 - [Pinia 官方文档](https://pinia.vuejs.org/)
 - [TypeScript 官方文档](https://www.typescriptlang.org/)
+
+---
+
+## 开发历史与更新记录
+
+### 2025-02 - UI 优化与 AI 重构
+
+#### 界面改进
+
+1. **棋盘尺寸放大** - 将棋盘格子从 32px 放大到 48px (1.5倍)，棋子从 26px 放大到 40px
+2. **视觉简化** - 减少网格线粗细，降低透明度至 0.4，移除边框改用 box-shadow
+3. **层级修复** - 修复网格线显示在棋子上方的问题，设置 z-index 确保网格线在下层
+
+#### AI 算法演进 (重要)
+
+**问题背景**: 初始的 Minimax + Alpha-Beta 剪枝实现存在多个严重 bug，导致 AI"乱下棋"：
+
+1. **Bug 1**: `evaluateLine` 函数从 `count = 1` 开始，假设空位已有棋子
+2. **Bug 2**: 候选位置选择使用固定的 'black' 而非 `aiPlayer`
+3. **Bug 3**: 开局搜索范围过大 (2格)，导致在远处落子
+4. **Bug 4**: 复杂递归逻辑难以调试
+
+**最终方案**: 完全重写为 **贪心算法 + 模式检测**
+
+```typescript
+// 新 AI 核心逻辑 (src/utils/ai.ts)
+export function getBestMove(board, difficulty, aiPlayer) {
+  // 1. 检查是否有直接获胜位置
+  const winMove = findCriticalMove(board, aiPlayer, true)
+  if (winMove) return winMove.move
+
+  // 2. 检查是否需要紧急防守
+  const blockMove = findCriticalMove(board, opponent, false)
+  if (blockMove?.score >= SCORE.LIVE_FOUR) {
+    return blockMove.move
+  }
+
+  // 3. 开局策略：前几手下在天元附近
+  if (stoneCount <= 4) {
+    const openingMove = getOpeningMove(board, aiPlayer)
+    if (openingMove) return openingMove
+  }
+
+  // 4. 贪心选择：评估所有候选位置
+  const candidates = getCandidatesAndScore(board, aiPlayer, searchDepth)
+  return candidates[0]?.move || null
+}
+```
+
+**棋型评分系统**:
+
+```typescript
+const SCORE = {
+  FIVE: 1000000, // 五连 - 必胜
+  LIVE_FOUR: 500000, // 活四 - 两端开放的四连
+  RUSH_FOUR: 10000, // 冲四 - 一端开放的四连
+  LIVE_THREE: 5000, // 活三
+  SLEEP_THREE: 500, // 眠三
+  LIVE_TWO: 100, // 活二
+  ONE: 10 // 单子
+}
+```
+
+**模式检测函数** - `analyzePatterns(board, row, col, player)`:
+
+- 检测四个方向（横、竖、左斜、右斜）的棋型
+- 计算连续棋子数和开放端数
+- 返回各类棋型的布尔值
+
+**位置评估函数** - `evaluatePosition(board, row, col, player)`:
+
+- 模拟落子后的棋型（进攻价值）
+- 评估对手在此落子会怎样（防守价值）
+- 防守权重 1.2 倍
+
+**技术要点**:
+
+- 使用 `makeMove` 创建临时棋盘进行模拟
+- 只考虑有邻近棋子的空位（动态搜索范围）
+- 简单模式增加随机性（从前3名中随机选择）
+
+#### 已知文件结构
+
+- `src/components/Cell.vue` - 单个棋盘格子，支持最后落子标记、悔棋动画、胜利连线
+- `src/components/Board.vue` - 主棋盘组件，15×15 网格
+- `src/components/GameReplay.vue` - 游戏复盘组件，支持步进和自动播放
+- `src/utils/ai.ts` - AI 算法实现（贪心算法版本）
+- `src/utils/game.ts` - 游戏规则工具函数
+- `src/utils/audio.ts` - 音效管理系统
+- `src/views/Leaderboard.vue` - 排行榜页面
+
+#### 关键常量
+
+- `BOARD_SIZE = 15` - 棋盘大小
+- 棋子尺寸: 40px (桌面), 30px (移动端)
+- 格子尺寸: 48px (桌面), 36px (移动端)

@@ -46,7 +46,7 @@ function onGameOver() {
       result,
       difficulty: game.aiConfig.difficulty,
       moves: game.moveHistory,
-      duration: 0 // TODO: 添加计时功能
+      duration: 0, // TODO: 添加计时功能
     })
   }
 }
@@ -59,7 +59,7 @@ watch(
     if (isOver) {
       onGameOver()
     }
-  }
+  },
 )
 
 // 导航到排行榜

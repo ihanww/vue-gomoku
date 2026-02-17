@@ -20,8 +20,8 @@ export const useStatsStore = defineStore('stats', () => {
     bestScores: {
       easy: null,
       medium: null,
-      hard: null
-    }
+      hard: null,
+    },
   })
 
   // ===== Actions =====
@@ -41,8 +41,8 @@ export const useStatsStore = defineStore('stats', () => {
           bestScores: {
             easy: parsed.bestScores?.easy || null,
             medium: parsed.bestScores?.medium || null,
-            hard: parsed.bestScores?.hard || null
-          }
+            hard: parsed.bestScores?.hard || null,
+          },
         }
       }
     } catch (error) {
@@ -96,12 +96,16 @@ export const useStatsStore = defineStore('stats', () => {
     const current = stats.value.bestScores[difficulty]
 
     // 如果没有记录，或者创造了新纪录
-    if (!current || moves < current.minMoves || (moves === current.minMoves && duration < current.bestTime)) {
+    if (
+      !current ||
+      moves < current.minMoves ||
+      (moves === current.minMoves && duration < current.bestTime)
+    ) {
       stats.value.bestScores[difficulty] = {
         difficulty,
         minMoves: moves,
         bestTime: duration,
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
       }
     }
   }
@@ -117,8 +121,8 @@ export const useStatsStore = defineStore('stats', () => {
       bestScores: {
         easy: null,
         medium: null,
-        hard: null
-      }
+        hard: null,
+      },
     }
     saveToStorage()
   }
@@ -140,14 +144,14 @@ export const useStatsStore = defineStore('stats', () => {
       `总局数,${totalGames.value}`,
       `胜率,${winRate.value.toFixed(1)}%`,
       '',
-      '难度,最少步数,最佳用时,日期'
+      '难度,最少步数,最佳用时,日期',
     ]
 
     for (const difficulty of ['easy', 'medium', 'hard'] as const) {
       const score = stats.value.bestScores[difficulty]
       if (score) {
         lines.push(
-          `${difficulty},${score.minMoves},${Math.floor(score.bestTime / 60)}:${(score.bestTime % 60).toString().padStart(2, '0')},${new Date(score.date).toLocaleDateString()}`
+          `${difficulty},${score.minMoves},${Math.floor(score.bestTime / 60)}:${(score.bestTime % 60).toString().padStart(2, '0')},${new Date(score.date).toLocaleDateString()}`,
         )
       }
     }
@@ -182,7 +186,7 @@ export const useStatsStore = defineStore('stats', () => {
         difficulty: difficulty as Difficulty,
         minMoves: score!.minMoves,
         bestTime: score!.bestTime,
-        date: score!.date
+        date: score!.date,
       }))
       .sort((a, b) => {
         // 按难度排序
@@ -213,6 +217,6 @@ export const useStatsStore = defineStore('stats', () => {
     winRate,
     currentWinStreak,
     bestScoresList,
-    hasStats
+    hasStats,
   }
 })

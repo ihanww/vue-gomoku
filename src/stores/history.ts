@@ -20,7 +20,7 @@ export const useHistoryStore = defineStore('history', () => {
   const replayState = ref<ReplayState>({
     currentGame: null,
     currentStep: 0,
-    isPlaying: false
+    isPlaying: false,
   })
 
   /** 自动播放定时器 */
@@ -73,7 +73,7 @@ export const useHistoryStore = defineStore('history', () => {
       totalMoves: moves.length,
       difficulty,
       duration,
-      moves: [...moves]
+      moves: [...moves],
     }
 
     // 添加到开头
@@ -115,7 +115,7 @@ export const useHistoryStore = defineStore('history', () => {
       replayState.value = {
         currentGame: history,
         currentStep: 0,
-        isPlaying: false
+        isPlaying: false,
       }
       stopAutoPlay()
     }
@@ -129,7 +129,7 @@ export const useHistoryStore = defineStore('history', () => {
     replayState.value = {
       currentGame: null,
       currentStep: 0,
-      isPlaying: false
+      isPlaying: false,
     }
   }
 
@@ -223,7 +223,7 @@ export const useHistoryStore = defineStore('history', () => {
 对手: ${h.opponent}
 步数: ${h.totalMoves}
 用时: ${Math.floor(h.duration / 60)}分${h.duration % 60}秒
-`
+`,
       )
       .join('\n---\n')
   }
@@ -264,7 +264,7 @@ ${history.moves.map((m) => `;${m.player === 'black' ? 'B' : 'W'}[${m.col},${m.ro
 
     // 创建空棋盘
     const board: Array<Array<'empty' | 'black' | 'white'>> = Array.from({ length: 15 }, () =>
-      Array(15).fill('empty')
+      Array(15).fill('empty'),
     )
 
     // 应用到当前步的落子
@@ -321,6 +321,6 @@ ${history.moves.map((m) => `;${m.player === 'black' ? 'B' : 'W'}[${m.col},${m.ro
     isReplaying,
     replayBoard,
     isReplayAtEnd,
-    isReplayAtStart
+    isReplayAtStart,
   }
 })

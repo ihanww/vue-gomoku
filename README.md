@@ -1,73 +1,184 @@
-# vue-gomoku
+# Vue Gomoku - 五子棋人机对战
 
-This template should help get you started developing with Vue 3 in Vite.
+> 基于 Vue 3 + TypeScript 开发的五子棋人机对战网页游戏
 
-## Recommended IDE Setup
+![Vue 3](https://img.shields.io/badge/Vue-3.5-4FC08D?style=flat&logo=vue.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?style=flat&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-7.0-646CFF?style=flat&logo=vite&logoColor=white)
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## 功能特性
 
-## Recommended Browser Setup
+### 核心玩法
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+- **标准 15×15 棋盘** - 完整的五子棋游戏体验
+- **人机对战** - 智能 AI 对手，三种难度可选
+- **执棋选择** - 可选择执黑先手或执白后手
+- **胜负判定** - 自动检测五连珠胜利条件
 
-## Type Support for `.vue` Imports in TS
+### 游戏功能
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- **悔棋** - 支持撤销上一步操作
+- **重新开始** - 随时开启新对局
+- **游戏计时** - 记录对局用时
+- **历史记录** - 保存每局游戏的落子记录
 
-## Customize configuration
+### 数据统计
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- **战绩统计** - 胜/负/和局数统计
+- **最佳成绩** - 各难度最快获胜记录
+- **数据导出** - 支持 JSON/CSV 格式导出
 
-## Project Setup
+### 游戏复盘
 
-```sh
+- **对局回放** - 支持历史对局回放查看
+- **步进控制** - 首步/上步/下步/末步
+- **自动播放** - 可调节播放速度
+- **进度拖动** - 快速跳转到指定步数
+
+### AI 算法
+
+- **贪心策略** - 基于模式评估的贪心算法
+- **棋型识别** - 支持五连、活四、冲四、活三、眠三、活二等棋型
+- **攻防兼顾** - 同时评估进攻和防守价值
+- **开局策略** - 针对前几手棋的特殊处理
+
+### 用户体验
+
+- **响应式设计** - 支持桌面和移动设备
+- **最后落子标记** - 清晰显示最后一步位置
+- **胜利连线高亮** - 获胜棋子动态光晕效果
+- **流畅动画** - 落子、悔棋等过渡动画
+
+## 技术栈
+
+| 技术栈 | 版本 | 用途 |
+| ------ | ---- | ---- |
+| Vue | 3.5 | 前端框架 |
+| TypeScript | 5.6 | 类型安全 |
+| Vite | 7.0 | 构建工具 |
+| Pinia | - | 状态管理 |
+| Vue Router | 5.0 | 路由管理 |
+
+## 快速开始
+
+### 环境要求
+
+- Node.js `^20.19.0 || >=22.12.0`
+- pnpm `^8.0.0`
+
+### 安装依赖
+
+```bash
 pnpm install
 ```
 
-### Compile and Hot-Reload for Development
+### 启动开发服务器
 
-```sh
+```bash
 pnpm dev
 ```
 
-### Type-Check, Compile and Minify for Production
+访问 <http://localhost:5173> 开始游戏
 
-```sh
+### 生产构建
+
+```bash
 pnpm build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+构建产物位于 `dist/` 目录
 
-```sh
+## 游戏规则
+
+1. **棋盘大小**: 15×15 交叉点
+2. **先手**: 黑方先行
+3. **胜利条件**: 任意方向（横、竖、斜）连成五子即获胜
+4. **无禁手**: 简化规则，无任何禁手限制
+
+## AI 难度说明
+
+| 难度 | 搜索深度 | 特点 |
+| --- | --- | --- |
+| 简单 | 8 | 适当随机性，适合新手 |
+| 中等 | 12 | 平衡攻防，有一定挑战 |
+| 困难 | 20 | 深度评估，极具挑战性 |
+
+## 项目结构
+
+```
+src/
+├── components/         # Vue 组件
+│   ├── Board.vue       # 棋盘组件
+│   ├── Cell.vue        # 棋盘格子组件
+│   ├── GameControls.vue # 游戏控制面板
+│   ├── GameHistory.vue  # 历史记录组件
+│   └── GameReplay.vue   # 游戏复盘组件
+├── stores/             # Pinia 状态管理
+│   ├── game.ts         # 游戏状态
+│   ├── history.ts      # 历史记录状态
+│   └── stats.ts        # 统计数据状态
+├── utils/              # 工具函数
+│   ├── ai.ts           # AI 算法实现
+│   ├── game.ts         # 游戏规则
+│   └── audio.ts        # 音效管理
+├── views/              # 页面视图
+│   ├── Game.vue        # 游戏主页
+│   └── Leaderboard.vue # 排行榜页面
+└── types/              # 类型定义
+    └── game.ts         # 游戏类型
+```
+
+## 开发命令
+
+```bash
+# 启动开发服务器（热重载）
+pnpm dev
+
+# 类型检查
+pnpm type-check
+
+# 生产构建
+pnpm build
+
+# 单元测试
 pnpm test:unit
-```
 
-### Run End-to-End Tests with [Playwright](https://playwright.dev)
-
-```sh
-# Install browsers for the first run
-npx playwright install
-
-# When testing on CI, must build the project first
-pnpm build
-
-# Runs the end-to-end tests
+# E2E 测试
 pnpm test:e2e
-# Runs the tests only on Chromium
-pnpm test:e2e --project=chromium
-# Runs the tests of a specific file
-pnpm test:e2e tests/example.spec.ts
-# Runs the tests in debug mode
-pnpm test:e2e --debug
-```
 
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
+# 代码检查
 pnpm lint
+
+# 代码格式化
+pnpm format
 ```
+
+## 浏览器支持
+
+- Chrome >= 87
+- Firefox >= 78
+- Safari >= 14
+- Edge >= 88
+
+## 开发工具推荐
+
+### IDE
+
+- [VS Code](https://code.visualstudio.com/)
+- [Vue - Official (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+
+### 浏览器插件
+
+- [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
+
+## 许可证
+
+MIT License
+
+## 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+---
+
+**享受游戏，祝您获胜！** 🎮

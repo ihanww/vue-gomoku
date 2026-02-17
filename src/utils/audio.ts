@@ -21,7 +21,7 @@ const SOUND_CONFIGS: Record<SoundType, { path: string; volume: number }> = {
   draw: { path: '/sounds/draw.mp3', volume: 0.6 },
   click: { path: '/sounds/click.mp3', volume: 0.4 },
   undo: { path: '/sounds/undo.mp3', volume: 0.5 },
-  start: { path: '/sounds/start.mp3', volume: 0.5 }
+  start: { path: '/sounds/start.mp3', volume: 0.5 },
 }
 
 /** 音效设置 */
@@ -39,7 +39,7 @@ const DEFAULT_SETTINGS: AudioSettings = {
   enabled: true,
   masterVolume: 0.8,
   musicVolume: 0.6,
-  sfxVolume: 0.7
+  sfxVolume: 0.7,
 }
 
 /**

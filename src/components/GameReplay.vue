@@ -16,7 +16,7 @@ const history = useHistoryStore()
 const playbackSpeeds = [
   { value: 2000, label: '慢速' },
   { value: 1000, label: '正常' },
-  { value: 500, label: '快速' }
+  { value: 500, label: '快速' },
 ]
 
 /** 当前播放速度 */
@@ -144,7 +144,9 @@ onUnmounted(() => {
       <div class="board-container">
         <!-- 列标签 -->
         <div class="column-labels">
-          <span v-for="label in 'ABCDEFGHIJKLMNO'.split('')" :key="label" class="label">{{ label }}</span>
+          <span v-for="label in 'ABCDEFGHIJKLMNO'.split('')" :key="label" class="label">{{
+            label
+          }}</span>
         </div>
 
         <div class="board-wrapper">
@@ -195,15 +197,15 @@ onUnmounted(() => {
           <button class="btn-control" :disabled="isAtStart" @click="goPrev" title="上一步">
             ◀
           </button>
-          <button class="btn-control btn-play" @click="togglePlay" :title="isPlaying ? '暂停' : '播放'">
+          <button
+            class="btn-control btn-play"
+            @click="togglePlay"
+            :title="isPlaying ? '暂停' : '播放'"
+          >
             {{ isPlaying ? '⏸' : '▶' }}
           </button>
-          <button class="btn-control" :disabled="isAtEnd" @click="goNext" title="下一步">
-            ▶
-          </button>
-          <button class="btn-control" :disabled="isAtEnd" @click="goLast" title="末步">
-            ⏭
-          </button>
+          <button class="btn-control" :disabled="isAtEnd" @click="goNext" title="下一步">▶</button>
+          <button class="btn-control" :disabled="isAtEnd" @click="goLast" title="末步">⏭</button>
         </div>
 
         <!-- 播放速度 -->
@@ -225,13 +227,25 @@ onUnmounted(() => {
         <div class="info-row">
           <span class="info-label">结果：</span>
           <span class="info-value" :class="'result-' + currentGame.result">
-            {{ currentGame.result === 'win' ? '胜利' : currentGame.result === 'lose' ? '失败' : '和棋' }}
+            {{
+              currentGame.result === 'win'
+                ? '胜利'
+                : currentGame.result === 'lose'
+                  ? '失败'
+                  : '和棋'
+            }}
           </span>
         </div>
         <div class="info-row">
           <span class="info-label">难度：</span>
           <span class="info-value">
-            {{ currentGame.difficulty === 'easy' ? '简单' : currentGame.difficulty === 'medium' ? '中等' : '困难' }}
+            {{
+              currentGame.difficulty === 'easy'
+                ? '简单'
+                : currentGame.difficulty === 'medium'
+                  ? '中等'
+                  : '困难'
+            }}
           </span>
         </div>
         <div class="info-row">

@@ -23,9 +23,7 @@ function getCell(board: BoardType, row: number, col: number): BoardCell {
  * @returns 15×15 的空棋盘二维数组
  */
 export function createEmptyBoard(): BoardType {
-  return Array.from({ length: BOARD_SIZE }, () =>
-    Array(BOARD_SIZE).fill('empty')
-  ) as BoardType
+  return Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill('empty')) as BoardType
 }
 
 /**
@@ -53,12 +51,7 @@ export function isValidMove(board: BoardType, row: number, col: number): boolean
  * @param player 玩家
  * @returns 新的棋盘（不修改原棋盘）
  */
-export function makeMove(
-  board: BoardType,
-  row: number,
-  col: number,
-  player: Player
-): BoardType {
+export function makeMove(board: BoardType, row: number, col: number, player: Player): BoardType {
   if (!isValidMove(board, row, col)) {
     return board
   }
@@ -87,19 +80,13 @@ function countDirection(
   col: number,
   deltaRow: number,
   deltaCol: number,
-  player: Player
+  player: Player,
 ): number {
   let count = 0
   let r = row + deltaRow
   let c = col + deltaCol
 
-  while (
-    r >= 0 &&
-    r < BOARD_SIZE &&
-    c >= 0 &&
-    c < BOARD_SIZE &&
-    getCell(board, r, c) === player
-  ) {
+  while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && getCell(board, r, c) === player) {
     count++
     r += deltaRow
     c += deltaCol
@@ -120,10 +107,12 @@ export function checkHorizontal(
   board: BoardType,
   row: number,
   col: number,
-  player: Player
+  player: Player,
 ): boolean {
   const count =
-    1 + countDirection(board, row, col, 0, -1, player) + countDirection(board, row, col, 0, 1, player)
+    1 +
+    countDirection(board, row, col, 0, -1, player) +
+    countDirection(board, row, col, 0, 1, player)
   return count >= WIN_COUNT
 }
 
@@ -135,12 +124,7 @@ export function checkHorizontal(
  * @param player 玩家
  * @returns 是否获胜
  */
-export function checkVertical(
-  board: BoardType,
-  row: number,
-  col: number,
-  player: Player
-): boolean {
+export function checkVertical(board: BoardType, row: number, col: number, player: Player): boolean {
   const count =
     1 +
     countDirection(board, row, col, -1, 0, player) +
@@ -156,12 +140,7 @@ export function checkVertical(
  * @param player 玩家
  * @returns 是否获胜
  */
-export function checkDiagonal(
-  board: BoardType,
-  row: number,
-  col: number,
-  player: Player
-): boolean {
+export function checkDiagonal(board: BoardType, row: number, col: number, player: Player): boolean {
   const count =
     1 +
     countDirection(board, row, col, -1, -1, player) +
@@ -181,7 +160,7 @@ export function checkAntiDiagonal(
   board: BoardType,
   row: number,
   col: number,
-  player: Player
+  player: Player,
 ): boolean {
   const count =
     1 +
@@ -198,12 +177,7 @@ export function checkAntiDiagonal(
  * @param player 玩家
  * @returns 是否获胜
  */
-export function checkWin(
-  board: BoardType,
-  row: number,
-  col: number,
-  player: Player
-): boolean {
+export function checkWin(board: BoardType, row: number, col: number, player: Player): boolean {
   return (
     checkHorizontal(board, row, col, player) ||
     checkVertical(board, row, col, player) ||
@@ -233,7 +207,7 @@ export function getPositionScore(
   board: BoardType,
   row: number,
   col: number,
-  player: Player
+  player: Player,
 ): number {
   const opponent = player === 'black' ? 'white' : 'black'
 
@@ -253,17 +227,12 @@ export function getPositionScore(
  * @param player 玩家
  * @returns 该位置的评估分数
  */
-function evaluateDirection(
-  board: BoardType,
-  row: number,
-  col: number,
-  player: Player
-): number {
+function evaluateDirection(board: BoardType, row: number, col: number, player: Player): number {
   const directions = [
     [0, 1], // 横向
     [1, 0], // 纵向
     [1, 1], // 主对角线
-    [1, -1] // 副对角线
+    [1, -1], // 副对角线
   ]
 
   let totalScore = 0
@@ -292,7 +261,7 @@ function evaluateLine(
   col: number,
   deltaRow: number,
   deltaCol: number,
-  player: Player
+  player: Player,
 ): number {
   // 检查正向和反向
   let count = 1
@@ -379,7 +348,7 @@ export function getNeighborEmptyPositions(
   board: BoardType,
   row: number,
   col: number,
-  radius = 2
+  radius = 2,
 ): Array<{ row: number; col: number }> {
   const positions: Array<{ row: number; col: number }> = []
   const startRow = Math.max(0, row - radius)

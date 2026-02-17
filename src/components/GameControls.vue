@@ -29,13 +29,13 @@ function handleUndo() {
 const difficultyOptions: { value: Difficulty; label: string }[] = [
   { value: 'easy', label: '简单' },
   { value: 'medium', label: '中等' },
-  { value: 'hard', label: '困难' }
+  { value: 'hard', label: '困难' },
 ]
 
 /** 执棋选项 */
 const playerColorOptions: { value: Exclude<Player, null>; label: string }[] = [
   { value: 'black', label: '执黑（先手）' },
-  { value: 'white', label: '执白（后手）' }
+  { value: 'white', label: '执白（后手）' },
 ]
 
 /** 设置难度 */
@@ -59,7 +59,13 @@ function setPlayerColor(color: Player) {
 <template>
   <div class="game-controls">
     <!-- 游戏状态显示 -->
-    <div class="status-panel" :class="{ 'status-win': game.winner === game.playerColor, 'status-lose': game.winner && game.winner !== game.playerColor }">
+    <div
+      class="status-panel"
+      :class="{
+        'status-win': game.winner === game.playerColor,
+        'status-lose': game.winner && game.winner !== game.playerColor,
+      }"
+    >
       <div class="status-text" :class="{ 'status-gameover': game.isGameOver }">
         {{ game.currentPlayerText }}
       </div>

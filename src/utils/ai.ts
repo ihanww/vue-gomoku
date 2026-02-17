@@ -12,7 +12,7 @@ import {
   getNeighborEmptyPositions,
   isBoardEmpty,
   getCenterPosition,
-  BOARD_SIZE
+  BOARD_SIZE,
 } from './game'
 
 /** 棋型评分 */
@@ -23,7 +23,7 @@ const SCORE = {
   LIVE_THREE: 5000,
   SLEEP_THREE: 500,
   LIVE_TWO: 100,
-  ONE: 10
+  ONE: 10,
 } as const
 
 function getCell(board: BoardType, row: number, col: number): 'empty' | 'black' | 'white' {
@@ -51,7 +51,7 @@ function analyzePatterns(
   board: BoardType,
   row: number,
   col: number,
-  player: Player
+  player: Player,
 ): {
   five: boolean
   liveFour: boolean
@@ -66,10 +66,15 @@ function analyzePatterns(
     rushFour: false,
     liveThree: false,
     sleepThree: false,
-    liveTwo: false
+    liveTwo: false,
   }
 
-  const directions = [[0, 1], [1, 0], [1, 1], [1, -1]] as const
+  const directions = [
+    [0, 1],
+    [1, 0],
+    [1, 1],
+    [1, -1],
+  ] as const
 
   for (const [dr, dc] of directions) {
     // 计算该方向的连续棋子数和开放端数
@@ -80,7 +85,13 @@ function analyzePatterns(
     // 正向
     let r = row + dr
     let c = col + dc
-    while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && getCell(board, r, c) === player) {
+    while (
+      r >= 0 &&
+      r < BOARD_SIZE &&
+      c >= 0 &&
+      c < BOARD_SIZE &&
+      getCell(board, r, c) === player
+    ) {
       count++
       r += dr
       c += dc
@@ -94,7 +105,13 @@ function analyzePatterns(
     // 反向
     r = row - dr
     c = col - dc
-    while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && getCell(board, r, c) === player) {
+    while (
+      r >= 0 &&
+      r < BOARD_SIZE &&
+      c >= 0 &&
+      c < BOARD_SIZE &&
+      getCell(board, r, c) === player
+    ) {
       count++
       r -= dr
       c -= dc
@@ -159,7 +176,7 @@ function evaluatePosition(board: BoardType, row: number, col: number, player: Pl
 export function getBestMove(
   board: BoardType,
   difficulty: Difficulty,
-  aiPlayer: Player
+  aiPlayer: Player,
 ): { row: number; col: number } | null {
   const stoneCount = countStones(board)
 
@@ -211,16 +228,14 @@ export function getBestMove(
 function findCriticalMove(
   board: BoardType,
   player: Player,
-  checkWin: boolean
+  checkWin: boolean,
 ): { move: { row: number; col: number }; score: number } | null {
   const emptyPositions = getEmptyPositions(board)
 
   for (const { row, col } of emptyPositions) {
     // 只考虑有棋子邻近的位置
     const neighbors = getNeighborEmptyPositions(board, row, col, 2)
-    const hasNeighbor = neighbors.some(
-      ({ row: r, col: c }) => getCell(board, r, c) !== 'empty'
-    )
+    const hasNeighbor = neighbors.some(({ row: r, col: c }) => getCell(board, r, c) !== 'empty')
     if (!hasNeighbor) continue
 
     const testBoard = makeMove(board, row, col, player)
@@ -233,7 +248,11 @@ function findCriticalMove(
     } else {
       // 防守时，只关注最紧急的威胁
       if (patterns.five || patterns.liveFour || patterns.rushFour) {
-        const score = patterns.five ? SCORE.FIVE : patterns.liveFour ? SCORE.LIVE_FOUR : SCORE.RUSH_FOUR
+        const score = patterns.five
+          ? SCORE.FIVE
+          : patterns.liveFour
+            ? SCORE.LIVE_FOUR
+            : SCORE.RUSH_FOUR
         return { move: { row, col }, score }
       }
     }
@@ -248,7 +267,7 @@ function findCriticalMove(
 function getCandidatesAndScore(
   board: BoardType,
   player: Player,
-  maxCount: number
+  maxCount: number,
 ): { move: { row: number; col: number }; score: number }[] {
   const emptyPositions = getEmptyPositions(board)
   const candidates: { move: { row: number; col: number }; score: number }[] = []
@@ -260,9 +279,7 @@ function getCandidatesAndScore(
   for (const { row, col } of emptyPositions) {
     // 只考虑有棋子邻近的位置
     const neighbors = getNeighborEmptyPositions(board, row, col, searchRange)
-    const hasNeighbor = neighbors.some(
-      ({ row: r, col: c }) => getCell(board, r, c) !== 'empty'
-    )
+    const hasNeighbor = neighbors.some(({ row: r, col: c }) => getCell(board, r, c) !== 'empty')
     if (!hasNeighbor) continue
 
     const score = evaluatePosition(board, row, col, player)
@@ -289,10 +306,7 @@ function getCandidatesAndScore(
 /**
  * 开局策略
  */
-function getOpeningMove(
-  board: BoardType,
-  aiPlayer: Player
-): { row: number; col: number } | null {
+function getOpeningMove(board: BoardType, aiPlayer: Player): { row: number; col: number } | null {
   const center = getCenterPosition()
 
   // 如果中心为空，返回中心
@@ -309,7 +323,7 @@ function getOpeningMove(
     { row: center.row - 1, col: center.col - 1 },
     { row: center.row - 1, col: center.col + 1 },
     { row: center.row + 1, col: center.col - 1 },
-    { row: center.row + 1, col: center.col + 1 }
+    { row: center.row + 1, col: center.col + 1 },
   ]
 
   for (const pos of positions) {
@@ -332,7 +346,7 @@ function getOpeningMove(
  */
 export function getFirstMove(
   board: BoardType,
-  aiPlayer: Player
+  aiPlayer: Player,
 ): { row: number; col: number } | null {
   return getBestMove(board, 'medium', aiPlayer)
 }

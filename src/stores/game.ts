@@ -6,13 +6,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Player, BoardType, Move, Difficulty, GameMode, AiConfig } from '@/types/game'
-import {
-  createEmptyBoard,
-  isValidMove,
-  makeMove,
-  checkWin,
-  isBoardFull
-} from '@/utils/game'
+import { createEmptyBoard, isValidMove, makeMove, checkWin, isBoardFull } from '@/utils/game'
 import { getBestMove } from '@/utils/ai'
 
 export const useGameStore = defineStore('game', () => {
@@ -40,7 +34,7 @@ export const useGameStore = defineStore('game', () => {
   const aiConfig = ref<AiConfig>({
     difficulty: 'medium',
     aiPlayer: 'white',
-    searchDepth: 4
+    searchDepth: 4,
   })
 
   /** AI 是否正在思考 */
@@ -130,11 +124,7 @@ export const useGameStore = defineStore('game', () => {
     await new Promise((resolve) => requestAnimationFrame(resolve))
 
     // 获取最佳落子位置
-    const bestMove = getBestMove(
-      board.value,
-      aiConfig.value.difficulty,
-      aiConfig.value.aiPlayer
-    )
+    const bestMove = getBestMove(board.value, aiConfig.value.difficulty, aiConfig.value.aiPlayer)
 
     isAiThinking.value = false
 
@@ -205,7 +195,7 @@ export const useGameStore = defineStore('game', () => {
     const depthMap: Record<Difficulty, number> = {
       easy: 2,
       medium: 4,
-      hard: 6
+      hard: 6,
     }
     aiConfig.value.searchDepth = depthMap[difficulty]
   }
@@ -258,7 +248,7 @@ export const useGameStore = defineStore('game', () => {
 
   /** 是否可以悔棋 */
   const canUndo = computed(
-    () => !isGameOver.value && !isAiThinking.value && moveHistory.value.length >= 2
+    () => !isGameOver.value && !isAiThinking.value && moveHistory.value.length >= 2,
   )
 
   /** 最后落子位置 */
@@ -295,6 +285,6 @@ export const useGameStore = defineStore('game', () => {
     gameStatusText,
     moveCount,
     canUndo,
-    lastMove
+    lastMove,
   }
 })

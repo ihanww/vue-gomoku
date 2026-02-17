@@ -7,14 +7,14 @@ const router = createRouter({
     {
       path: '/',
       name: 'game',
-      component: Game
+      component: Game,
     },
     {
       path: '/leaderboard',
       name: 'leaderboard',
-      component: () => import('@/views/Leaderboard.vue')
-    }
-  ]
+      component: () => import('@/views/Leaderboard.vue'),
+    },
+  ],
 })
 
 export default router

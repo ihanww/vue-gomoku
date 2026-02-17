@@ -171,12 +171,8 @@ function getDifficultyLabel(difficulty: string): string {
           <h2>数据管理</h2>
         </div>
         <div class="export-buttons">
-          <button class="btn-export" @click="handleExport('json')">
-            📄 导出 JSON
-          </button>
-          <button class="btn-export" @click="handleExport('csv')">
-            📊 导出 CSV
-          </button>
+          <button class="btn-export" @click="handleExport('json')">📄 导出 JSON</button>
+          <button class="btn-export" @click="handleExport('csv')">📊 导出 CSV</button>
         </div>
       </div>
     </main>

@@ -139,7 +139,12 @@ function handleExport() {
     <div class="history-header">
       <h3 class="history-title">对局历史</h3>
       <div class="header-actions">
-        <button v-if="history.histories.length > 0" class="btn-icon" title="导出" @click="handleExport">
+        <button
+          v-if="history.histories.length > 0"
+          class="btn-icon"
+          title="导出"
+          @click="handleExport"
+        >
           📥
         </button>
         <button
@@ -176,7 +181,9 @@ function handleExport() {
               <div class="item-info">
                 <span class="item-opponent">{{ item.opponent }}</span>
                 <span class="item-moves">{{ item.totalMoves }} 步</span>
-                <span v-if="item.duration > 0" class="item-duration">{{ formatDuration(item.duration) }}</span>
+                <span v-if="item.duration > 0" class="item-duration">{{
+                  formatDuration(item.duration)
+                }}</span>
               </div>
             </div>
             <div class="item-meta">
